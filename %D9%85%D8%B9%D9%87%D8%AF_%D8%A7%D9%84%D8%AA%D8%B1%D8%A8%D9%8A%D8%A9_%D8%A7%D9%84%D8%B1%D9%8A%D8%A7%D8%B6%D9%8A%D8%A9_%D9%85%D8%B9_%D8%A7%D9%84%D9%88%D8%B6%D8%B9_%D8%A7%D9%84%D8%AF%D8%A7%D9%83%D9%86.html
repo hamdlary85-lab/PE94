@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الموقع الرسمي - معهد التربية الرياضية للمعلمين بدمشق</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#f57c00',
+                            orangeDark: '#e65100',
+                            orangeLight: '#fff3e0',
+                            dark: '#1e293b',
+                            neutralBg: '#f8fafc',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Tajawal', 'Cairo', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts: Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .no-scroll {
+            overflow: hidden;
+        }
+
+        /* Smooth page transitions */
+        .page-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .page-section.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #f57c00;
+            border-radius: 4px;
+        }
+
+        /* Canvas styling for Penalty Game */
+        #penaltyCanvas {
+            background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 50%, #4CAF50 50%, #388E3C 100%);
+            touch-action: none;
+        }
+
+        /* Memory game card flip animation */
+        .memory-card {
+            perspective: 1000px;
+        }
+        .memory-card-inner {
+            transition: transform 0.4s;
+            transform-style: preserve-3d;
+        }
+        .memory-card.flipped .memory-card-inner {
+            transform: rotateY(180deg);
+        }
+        .memory-card-front, .memory-card-back {
+            backface-visibility: hidden;
+        }
+        .memory-card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Ordering game animation transitions */
+        .sortable-item {
+            transition: all 0.2s ease-in-out;
+        }
+
+        /* Subtle visual polish while keeping the original layout and content */
+        html { scroll-behavior: smooth; }
+        body {
+            background-image: radial-gradient(ellipse at top right, rgba(255, 237, 213, 0.42), transparent 34%),
+                              radial-gradient(ellipse at bottom left, rgba(226, 232, 240, 0.48), transparent 32%);
+            background-attachment: fixed;
+        }
+        .site-scroll-progress {
+            position: fixed; top: 0; right: 0; height: 4px; width: 0;
+            z-index: 100; pointer-events: none;
+            background: linear-gradient(90deg, #f59e0b, #f97316, #fb923c);
+            box-shadow: 0 1px 8px rgba(249, 115, 22, .28);
+        }
+        .back-to-top {
+            position: fixed; bottom: 22px; left: 22px; z-index: 60;
+            width: 46px; height: 46px; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #f59e0b, #ea580c); color: white;
+            box-shadow: 0 8px 22px rgba(234, 88, 12, .25);
+            border: 1px solid rgba(255,255,255,.65);
+            opacity: 0; visibility: hidden; transform: translateY(8px);
+            transition: opacity .22s ease, transform .22s ease, visibility .22s ease;
+        }
+        .back-to-top.is-visible { opacity: 1; visibility: visible; transform: translateY(0); }
+        .back-to-top:hover { filter: brightness(1.05); transform: translateY(-2px); }
+        button, a { outline-offset: 3px; }
+        button:focus-visible, a:focus-visible { outline: 3px solid rgba(249, 115, 22, .6); }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+        }
+
+
+        /* Additional premium finish: restrained motion, depth, and clearer hierarchy */
+        :root { --site-accent: #f57c00; --site-accent-soft: rgba(245, 124, 0, .12); }
+        header { box-shadow: 0 10px 28px rgba(15, 23, 42, .16); backdrop-filter: saturate(140%); }
+        header > div { position: relative; }
+        header .w-12.h-12 { transition: transform .25s ease, box-shadow .25s ease; }
+        header .flex.items-center.space-x-3:hover .w-12.h-12 { transform: rotate(-4deg) scale(1.04); box-shadow: 0 8px 24px rgba(245, 124, 0, .25); }
+        .page-section.active { animation: page-arrive .35s ease both; }
+        @keyframes page-arrive { from { opacity: .55; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        main .grid > [onclick], main .grid > .bg-white, main .grid > article {
+            transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+        }
+        main .grid > [onclick]:hover, main .grid > article:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 30px rgba(30, 41, 59, .09);
+            border-color: rgba(245, 124, 0, .38);
+        }
+        main .group > div:first-child { transition: transform .25s ease, box-shadow .25s ease; }
+        main .group:hover > div:first-child { transform: translateY(-2px) scale(1.04); }
+        main button:not(:disabled) { transition: transform .16s ease, box-shadow .16s ease, filter .16s ease; }
+        main button:not(:disabled):active { transform: scale(.98); }
+        main button:not(:disabled):hover { filter: saturate(1.08); }
+        main input:focus, main select:focus, main textarea:focus {
+            outline: none; border-color: var(--site-accent) !important;
+            box-shadow: 0 0 0 4px var(--site-accent-soft) !important;
+        }
+        .site-section-heading { position: relative; }
+        .site-section-heading::after {
+            content: ''; display: block; width: 54px; height: 3px; margin-top: 9px;
+            border-radius: 999px; background: linear-gradient(90deg, #f59e0b, #ea580c);
+        }
+        .back-to-top { border-radius: 50%; }
+        .back-to-top:focus-visible { outline: 3px solid #fdba74; outline-offset: 4px; }
+        @media (max-width: 640px) {
+            main .grid > [onclick]:hover, main .grid > article:hover { transform: translateY(-1px); }
+            .back-to-top { bottom: 16px; left: 16px; width: 42px; height: 42px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .page-section.active { animation: none; }
+            header .w-12.h-12, main .grid > [onclick], main .grid > article { transition: none; }
+        }
+    
+
+        /* Premium polish pack: visual-only enhancements, preserving all content */
+        :root { --premium-orange: #f57c00; --premium-amber: #ffb74d; --premium-ink: #1e293b; }
+        html { scroll-behavior: smooth; scrollbar-color: #f59e0b #eef0f3; scrollbar-width: thin; }
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f3f5; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg,#ffb74d,#e86b0c); border: 2px solid #f1f3f5; border-radius: 99px; }
+        ::selection { background: rgba(245,124,0,.22); color: #7c2d12; }
+        body { background-image: radial-gradient(ellipse at 4% 12%, rgba(251,146,60,.07), transparent 28%), radial-gradient(ellipse at 96% 42%, rgba(148,163,184,.10), transparent 30%); }
+        header { backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 8px 28px rgba(15,23,42,.14); }
+        header .w-12.h-12 { box-shadow: 0 0 0 4px rgba(251,146,60,.12), 0 8px 22px rgba(234,88,12,.2); transition: transform .25s ease, box-shadow .25s ease; }
+        header .flex.items-center.justify-between > div:first-child:hover .w-12.h-12 { transform: rotate(-4deg) scale(1.04); box-shadow: 0 0 0 5px rgba(251,146,60,.18), 0 10px 28px rgba(234,88,12,.25); }
+        .nav-btn { position: relative; isolation: isolate; }
+        .nav-btn::after { content:''; position:absolute; height:2px; right:14px; left:14px; bottom:4px; border-radius:99px; background:linear-gradient(90deg,#fbbf24,#f97316); transform:scaleX(0); transform-origin:center; transition:transform .22s ease; }
+        .nav-btn:hover::after, .nav-btn.is-current::after { transform:scaleX(1); }
+        .nav-btn.is-current { background:rgba(249,115,22,.13); color:#fdba74; }
+        .page-section.active { animation: premiumPageEnter .36s ease both; }
+        @keyframes premiumPageEnter { from { opacity:0; transform:translateY(7px); } to { opacity:1; transform:translateY(0); } }
+        main .grid > [onclick], main .grid > article, main .grid > a, main .rounded-2xl.border, main .rounded-xl.border { transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease; }
+        main .grid > [onclick]:hover, main .grid > article:hover, main .grid > a:hover, main .rounded-2xl.border:hover, main .rounded-xl.border:hover { border-color:rgba(245,124,0,.34); box-shadow:0 12px 28px rgba(30,41,59,.08), 0 3px 10px rgba(245,124,0,.05); }
+        main button:not(.nav-btn):not(.back-to-top) { transition: transform .16s ease, filter .16s ease, box-shadow .16s ease; }
+        main button:not(.nav-btn):not(.back-to-top):active { transform:scale(.975); filter:brightness(.97); }
+        main button:focus-visible, main a:focus-visible, header button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline:3px solid rgba(249,115,22,.7); outline-offset:3px; }
+        .site-section-heading { letter-spacing:.01em; }
+        .site-section-heading::after { width:68px; height:4px; box-shadow:0 2px 8px rgba(234,88,12,.18); }
+        .back-to-top { box-shadow:0 8px 24px rgba(234,88,12,.28); transition:opacity .2s ease, transform .2s ease, box-shadow .2s ease; }
+        .back-to-top:hover { transform:translateY(-3px); box-shadow:0 12px 28px rgba(234,88,12,.34); }
+        #site-scroll-progress { background:linear-gradient(90deg,#fbbf24,#f97316,#ea580c) !important; box-shadow:0 0 9px rgba(249,115,22,.35); }
+        img { transition: filter .25s ease; }
+        img:hover { filter:saturate(1.04); }
+        .rounded-full.bg-orange-100, .rounded-full.bg-amber-100 { box-shadow:inset 0 0 0 1px rgba(245,124,0,.08); }
+        @media (max-width:640px) {
+            header { backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+            main .grid > [onclick]:hover, main .grid > article:hover, main .grid > a:hover { transform:translateY(-1px); }
+        }
+        @media (prefers-reduced-motion:reduce) {
+            html { scroll-behavior:auto; }
+            *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+        }
+
+        /* Optional dark theme: preserves all existing sections and interactions */
+        body.dark-mode { background-color:#0b1220 !important; color:#e2e8f0 !important; background-image:radial-gradient(ellipse at 4% 12%,rgba(249,115,22,.055),transparent 28%),radial-gradient(ellipse at 96% 42%,rgba(51,65,85,.22),transparent 30%) !important; }
+        body.dark-mode main { color:#e2e8f0; }
+        body.dark-mode .bg-white { background-color:#172235 !important; }
+        body.dark-mode .bg-slate-50, body.dark-mode .bg-slate-100 { background-color:#202d40 !important; }
+        body.dark-mode .bg-slate-200 { background-color:#334155 !important; }
+        body.dark-mode .text-slate-900, body.dark-mode .text-slate-800 { color:#f1f5f9 !important; }
+        body.dark-mode .text-slate-700, body.dark-mode .text-slate-600 { color:#cbd5e1 !important; }
+        body.dark-mode .text-slate-500, body.dark-mode .text-slate-400 { color:#a7b4c7 !important; }
+        body.dark-mode .border-slate-200, body.dark-mode .border-slate-300 { border-color:#34445a !important; }
+        body.dark-mode .border-slate-200\/80 { border-color:rgba(71,85,105,.8) !important; }
+        body.dark-mode .bg-gradient-to-br.from-slate-50 { background-image:linear-gradient(to bottom right,#1c293b,rgba(124,45,18,.18)) !important; }
+        body.dark-mode .bg-orange-50, body.dark-mode .bg-orange-50\/80, body.dark-mode .bg-amber-50 { background-color:#3b291c !important; }
+        body.dark-mode .bg-orange-100, body.dark-mode .bg-amber-100 { background-color:#4a3020 !important; }
+        body.dark-mode .text-orange-900 { color:#fed7aa !important; }
+        body.dark-mode .text-indigo-700 { color:#c7d2fe !important; }
+        body.dark-mode .text-emerald-700 { color:#a7f3d0 !important; }
+        body.dark-mode .bg-indigo-100 { background-color:#292d4a !important; }
+        body.dark-mode .bg-emerald-100 { background-color:#173d36 !important; }
+        body.dark-mode .bg-sky-100 { background-color:#18374b !important; }
+        body.dark-mode .bg-purple-100 { background-color:#35254b !important; }
+        body.dark-mode .bg-rose-100 { background-color:#482532 !important; }
+        body.dark-mode .bg-amber-100 { background-color:#49351e !important; }
+        body.dark-mode input, body.dark-mode select, body.dark-mode textarea { background-color:#111c2d !important; color:#f1f5f9 !important; border-color:#475569 !important; }
+        body.dark-mode input::placeholder, body.dark-mode textarea::placeholder { color:#94a3b8 !important; }
+        body.dark-mode ::-webkit-scrollbar-track { background:#111827; }
+        body.dark-mode ::-webkit-scrollbar-thumb { border-color:#111827; }
+        #themeToggle { white-space:nowrap; }
+        @media (max-width:767px) { #themeToggle { padding:.5rem .65rem; font-size:.8rem; } }
+
+</style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-orange-500 selection:text-white">
+    <div id="site-scroll-progress" class="site-scroll-progress" aria-hidden="true"></div>
+
+    <!-- Navigation Header -->
+    <header class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white shadow-lg sticky top-0 z-50 border-b border-slate-700/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo / Title -->
+                <div class="flex items-center space-x-3 space-x-reverse cursor-pointer" onclick="navigateTo('home')">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-orange-600 to-amber-500 flex items-center justify-center text-white text-2xl shadow-lg border border-orange-400/30">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg sm:text-xl font-extrabold text-orange-400 leading-tight">معهد التربية الرياضية</h1>
+                        <p class="text-xs text-slate-300 font-medium">للمعلمين بدمشق</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav Navigation -->
+                <nav class="hidden md:flex items-center space-x-1 space-x-reverse">
+                    <button onclick="navigateTo('home')" class="nav-btn px-3.5 py-2 rounded-xl text-sm font-bold transition-all hover:bg-slate-700/70 hover:text-orange-400 flex items-center gap-2">
+                        <i class="fa-solid fa-house text-xs"></i>
+                        <span>الرئيسية</span>
+                    </button>
+                    <button onclick="navigateTo('registration')" class="nav-btn px-3.5 py-2 rounded-xl text-sm font-bold transition-all hover:bg-slate-700/70 hover:text-orange-400 flex items-center gap-2">
+                        <i class="fa-solid fa-id-card text-xs"></i>
+                        <span>كيفية التسجيل</span>
+                    </button>
+                    <button onclick="navigateTo('academic-year')" class="nav-btn px-3.5 py-2 rounded-xl text-sm font-bold transition-all hover:bg-slate-700/70 hover:text-orange-400 flex items-center gap-2">
+                        <i class="fa-solid fa-book-bookmark text-xs"></i>
+                        <span>السنة الدراسية</span>
+                    </button>
+                    <button onclick="navigateTo('teachers')" class="nav-btn px-3.5 py-2 rounded-xl text-sm font-bold transition-all hover:bg-slate-700/70 hover:text-orange-400 flex items-center gap-2">
+                        <i class="fa-solid fa-user-tie text-xs"></i>
+                        <span>أساتذة المعهد</span>
+                    </button>
+                    <!-- Enhanced Quiz Nav Icon -->
+                    <button onclick="navigateTo('quiz')" class="nav-btn px-3.5 py-2 rounded-xl text-sm font-bold transition-all hover:bg-slate-700/70 hover:text-orange-400 flex items-center gap-2">
+                        <i class="fa-solid fa-clipboard-question text-orange-400 text-xs"></i>
+                        <span>اختبر نفسك</span>
+                    </button>
+                    <button onclick="navigateTo('games')" class="nav-btn px-3.5 py-2 rounded-xl text-sm font-bold transition-all hover:bg-slate-700/70 hover:text-orange-400 flex items-center gap-2">
+                        <i class="fa-solid fa-gamepad text-xs"></i>
+                        <span>ألعب</span>
+                    </button>
+                </nav>
+
+                <!-- Optional light/dark theme toggle -->
+                <button id="themeToggle" type="button" onclick="toggleTheme()" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-bold text-slate-200 bg-slate-700/70 hover:bg-slate-600 transition-colors" aria-pressed="false" aria-label="تفعيل الوضع الداكن">
+                    <i id="themeToggleIcon" class="fa-solid fa-moon" aria-hidden="true"></i>
+                    <span id="themeToggleText">الوضع الداكن</span>
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Navigation -->
+        <div id="mobileMenu" class="hidden md:hidden bg-slate-900 border-t border-slate-800 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="navigateTo('home')" class="w-full text-right px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-800 hover:text-orange-400 flex items-center gap-2">
+                <i class="fa-solid fa-house"></i>
+                <span>الرئيسية</span>
+            </button>
+            <button onclick="navigateTo('registration')" class="w-full text-right px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-800 hover:text-orange-400 flex items-center gap-2">
+                <i class="fa-solid fa-id-card"></i>
+                <span>كيفية التسجيل</span>
+            </button>
+            <button onclick="navigateTo('academic-year')" class="w-full text-right px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-800 hover:text-orange-400 flex items-center gap-2">
+                <i class="fa-solid fa-book-bookmark"></i>
+                <span>السنة الدراسية</span>
+            </button>
+            <button onclick="navigateTo('teachers')" class="w-full text-right px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-800 hover:text-orange-400 flex items-center gap-2">
+                <i class="fa-solid fa-user-tie"></i>
+                <span>أساتذة المعهد</span>
+            </button>
+            <button onclick="navigateTo('quiz')" class="w-full text-right px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-800 hover:text-orange-400 flex items-center gap-2">
+                <i class="fa-solid fa-clipboard-question text-orange-400"></i>
+                <span>اختبر نفسك</span>
+            </button>
+            <button onclick="navigateTo('games')" class="w-full text-right px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-800 hover:text-orange-400 flex items-center gap-2">
+                <i class="fa-solid fa-gamepad"></i>
+                <span>ألعب</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Content Wrapper -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ================= PAGE: HOME ================= -->
+        <section id="page-home" class="page-section active space-y-10">
+            <!-- Advice Banner -->
+            <div class="bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-orange-500/10 border-r-4 border-orange-500 p-4 rounded-2xl shadow-sm flex items-center space-x-3 space-x-reverse">
+                <div class="w-10 h-10 rounded-xl bg-orange-500 text-white flex items-center justify-center text-lg flex-shrink-0 shadow">
+                    <i class="fa-solid fa-lightbulb"></i>
+                </div>
+                <p class="text-slate-800 font-bold text-sm sm:text-base">نصيحة اليوم: «حافظ على نظافة المعهد ومرافقه الرياضية والتربوية»</p>
+            </div>
+
+            <!-- Welcome Hero -->
+            <div class="relative rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-8 sm:p-12 md:p-16 overflow-hidden shadow-2xl border border-slate-700">
+                <div class="absolute -left-10 -bottom-10 opacity-10 text-orange-500 pointer-events-none">
+                    <i class="fa-solid fa-running text-9xl"></i>
+                </div>
+                <div class="relative z-10 max-w-3xl space-y-6">
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-semibold text-xs sm:text-sm">
+                        <i class="fa-solid fa-award"></i>
+                        <span>الصرح الرياضي والتربوي المتميز بدمشق</span>
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl md:text-5xl font-extrabold leading-tight tracking-tight text-white">
+                        أهلًا بك في معهد التربية الرياضية للمعلمين بدمشق
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        منصة تعليمية وتفاعلية متكاملة لإعداد كوادر التدريس الرياضي، وتطوير المهارات الرياضية والبدنية بأحدث الأساليب المعتمدة.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 5 Main Navigation Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                <!-- Card 1 -->
+                <div onclick="navigateTo('registration')" class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all transform hover:-translate-y-1 cursor-pointer border border-slate-200/80 flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center text-2xl mb-4 group-hover:bg-orange-600 group-hover:text-white transition-colors shadow-inner">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">كيفية التسجيل</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">خطوات المفاضلة والأوراق المطلوبة ولجان القبول الست</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div onclick="navigateTo('academic-year')" class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all transform hover:-translate-y-1 cursor-pointer border border-slate-200/80 flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center text-2xl mb-4 group-hover:bg-slate-700 group-hover:text-white transition-colors shadow-inner">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">السنة الدراسية</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">تصفح المقررات النظرية والعملية للسنوات والأصول الدراسية</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div onclick="navigateTo('teachers')" class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all transform hover:-translate-y-1 cursor-pointer border border-slate-200/80 flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-2xl mb-4 group-hover:bg-sky-600 group-hover:text-white transition-colors shadow-inner">
+                        <i class="fa-solid fa-user-tie"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">تعرّف على أساتذة المعهد</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">الكادر التدريسي والإداري والإشرافي بالمعهد</p>
+                </div>
+
+                <!-- Card 4 (Updated with distinctive icon) -->
+                <div onclick="navigateTo('quiz')" class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all transform hover:-translate-y-1 cursor-pointer border border-slate-200/80 flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-colors shadow-inner">
+                        <i class="fa-solid fa-clipboard-question"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">اختبر نفسك</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">اختبارات تفاعلية في القدم، السلة، والسباحة</p>
+                </div>
+
+                <!-- Card 5 -->
+                <div onclick="navigateTo('games')" class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all transform hover:-translate-y-1 cursor-pointer border border-slate-200/80 flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-2xl mb-4 group-hover:bg-purple-600 group-hover:text-white transition-colors shadow-inner">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">ألعب</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">ألعاب ممتعة وتحديات سرعة البديهة والمهارة</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE: REGISTRATION ================= -->
+        <section id="page-registration" class="page-section space-y-8">
+            <!-- Advice Banner -->
+            <div class="bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-orange-500/10 border-r-4 border-orange-500 p-4 rounded-2xl shadow-sm flex items-center space-x-3 space-x-reverse">
+                <div class="w-10 h-10 rounded-xl bg-orange-500 text-white flex items-center justify-center text-lg flex-shrink-0 shadow">
+                    <i class="fa-solid fa-folder-open"></i>
+                </div>
+                <p class="text-slate-800 font-bold text-sm sm:text-base">نصيحة: «تأكد من تجهيز الأوراق الثبوتية كاملة قبل مراجعة المعهد»</p>
+            </div>
+
+            <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <div class="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-lg">
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+                    <h2 class="text-2xl font-extrabold text-slate-800">كيفية التسجيل</h2>
+                </div>
+                <button onclick="navigateTo('home')" class="text-sm font-bold text-slate-600 hover:text-orange-600 flex items-center space-x-1 space-x-reverse">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>الرئيسية</span>
+                </button>
+            </div>
+
+            <!-- Sequential Steps -->
+            <div class="space-y-6">
+                <!-- Step 1 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 items-start hover:border-orange-300 transition-colors">
+                    <div class="w-12 h-12 rounded-xl bg-orange-600 text-white flex items-center justify-center text-xl font-black flex-shrink-0 shadow-md">
+                        1
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-1">التقدم إلى المفاضلة</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">يبدأ التسجيل بالتقدم إلى المفاضلة الخاصة بالقبول في معهد التربية الرياضية للمعلمين.</p>
+                    </div>
+                </div>
+
+                <!-- Step 2 (MODIFIED WITH ELEGANT ICONS & DESIGN FOR DOCUMENTS) -->
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-5 items-start hover:border-orange-300 transition-colors">
+                    <div class="w-12 h-12 rounded-xl bg-orange-600 text-white flex items-center justify-center text-xl font-black flex-shrink-0 shadow-md">
+                        2
+                    </div>
+                    <div class="space-y-4 flex-grow">
+                        <div>
+                            <h3 class="text-xl font-extrabold text-slate-800 mb-1">مراجعة المعهد وتجهيز الأوراق المطلوبة</h3>
+                            <p class="text-slate-600 text-sm">بعد التقدم إلى المفاضلة، يأتي الطالب إلى مقر المعهد ويحضر معه المستندات التالية:</p>
+                        </div>
+                        
+                        <!-- Documents Requirements Grid with Beautiful Icons -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
+                            <!-- Document 1: Photos -->
+                            <div class="bg-gradient-to-br from-slate-50 to-orange-50/40 p-4 rounded-2xl border border-orange-200/70 shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center group">
+                                <div class="w-12 h-12 rounded-2xl bg-orange-500 text-white flex items-center justify-center text-xl mb-3 shadow group-hover:scale-110 transition-transform">
+                                    <span class="relative inline-flex items-center justify-center w-full h-full">
+                                        <i class="fa-solid fa-person text-2xl translate-x-1"></i>
+                                        <i class="fa-solid fa-camera absolute text-sm -bottom-1 -right-1 bg-orange-500 rounded-md p-1 border border-white"></i>
+                                    </span>
+                                </div>
+                                <h4 class="font-extrabold text-slate-800 text-sm mb-1">احضار صورتان شخصيتان</h4>
+                                <span class="text-xs text-orange-600 font-semibold bg-orange-100/80 px-2.5 py-0.5 rounded-full">قياسية حديثة</span>
+                            </div>
+
+                            <!-- Document 3: Personal Card / ID -->
+                            <div class="bg-gradient-to-br from-slate-50 to-indigo-50/40 p-4 rounded-2xl border border-indigo-200/70 shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center group">
+                                <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-xl mb-3 shadow group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-address-card"></i>
+                                </div>
+                                <h4 class="font-extrabold text-slate-800 text-sm mb-1">احضار صورتان عن البطاقة الشخصية</h4>
+                                <span class="text-xs text-indigo-700 font-semibold bg-indigo-100/80 px-2.5 py-0.5 rounded-full">الوجهين الأمامي والخلفي</span>
+                            </div>
+
+                            <!-- Document 4: Baccalaureate Certificate -->
+                            <div class="bg-gradient-to-br from-slate-50 to-emerald-50/40 p-4 rounded-2xl border border-emerald-200/70 shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center group">
+                                <div class="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-xl mb-3 shadow group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+                                <h4 class="font-extrabold text-slate-800 text-sm mb-1">احضار صورتان عن شهادة البكالوريا</h4>
+                                <span class="text-xs text-emerald-700 font-semibold bg-emerald-100/80 px-2.5 py-0.5 rounded-full">مصدقة رسمياً</span>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-orange-50/80 border border-orange-200 rounded-xl flex items-center space-x-2 space-x-reverse text-xs text-orange-900 font-bold">
+                            <i class="fa-solid fa-circle-info text-orange-600 text-base"></i>
+                            <span>ملاحظة مهمة: بعد الحضور إلى المعهد وتسليم الأوراق، يقوم الطالب بتعبئة استمارة المعلومات الشخصية المطلوبة.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 items-start hover:border-orange-300 transition-colors">
+                    <div class="w-12 h-12 rounded-xl bg-orange-600 text-white flex items-center justify-center text-xl font-black flex-shrink-0 shadow-md">
+                        3
+                    </div>
+                    <div class="space-y-4 flex-grow">
+                        <h3 class="text-lg font-bold text-slate-800">إجراء فحص القبول</h3>
+                        <p class="text-slate-600 text-sm">بعد تجهيز الأوراق وتعبئة المعلومات، يخضع الطالب لفحص القبول الفني والبدني عبر اللجان الست التالية:</p>
+                        
+                        <!-- 6 Committees Cards -->
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            <div class="bg-slate-800 text-white p-3 rounded-xl text-center font-bold text-sm shadow hover:bg-orange-600 transition-colors">
+                                1. لجنة المقابلة
+                            </div>
+                            <div class="bg-slate-800 text-white p-3 rounded-xl text-center font-bold text-sm shadow hover:bg-orange-600 transition-colors">
+                                2. اللجنة الطبية
+                            </div>
+                            <div class="bg-slate-800 text-white p-3 rounded-xl text-center font-bold text-sm shadow hover:bg-orange-600 transition-colors">
+                                3. لجنة القوة البدنية
+                            </div>
+                            <div class="bg-slate-800 text-white p-3 rounded-xl text-center font-bold text-sm shadow hover:bg-orange-600 transition-colors">
+                                4. لجنة ألعاب القوى
+                            </div>
+                            <div class="bg-slate-800 text-white p-3 rounded-xl text-center font-bold text-sm shadow hover:bg-orange-600 transition-colors">
+                                5. لجنة المرونة
+                            </div>
+                            <div class="bg-slate-800 text-white p-3 rounded-xl text-center font-bold text-sm shadow hover:bg-orange-600 transition-colors">
+                                6. لجنة التوازن
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 items-start hover:border-orange-300 transition-colors">
+                    <div class="w-12 h-12 rounded-xl bg-orange-600 text-white flex items-center justify-center text-xl font-black flex-shrink-0 shadow-md">
+                        4
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-1">صدور النتائج</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">بعد مرور فترة من الوقت، تصدر علامات الفحص القبول الرسمي، ويمكن للطالب الاطلاع على نتيجته ومعرفة ما إذا كان مقبولًا بالمعهد.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE: ACADEMIC YEAR ================= -->
+        <section id="page-academic-year" class="page-section space-y-6">
+            <!-- Advice Banner -->
+            <div id="academic-advice" class="bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-orange-500/10 border-r-4 border-orange-500 p-4 rounded-2xl shadow-sm flex items-center space-x-3 space-x-reverse">
+                <div class="w-10 h-10 rounded-xl bg-orange-500 text-white flex items-center justify-center text-lg flex-shrink-0 shadow">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                </div>
+                <p id="academic-advice-text" class="text-slate-800 font-bold text-sm sm:text-base">نصيحة: «نظّم وقتك بين الدراسة النظرية والتطبيق العملي»</p>
+            </div>
+
+            <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+                <h2 class="text-2xl font-extrabold text-slate-800" id="academic-title">السنة الدراسية</h2>
+                <div class="flex items-center space-x-2 space-x-reverse">
+                    <button id="academic-back-btn" onclick="academicGoBack()" class="hidden text-sm font-bold bg-slate-200 text-slate-700 hover:bg-slate-300 px-3.5 py-1.5 rounded-xl transition-colors flex items-center space-x-1 space-x-reverse">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <span>رجوع</span>
+                    </button>
+                    <button onclick="navigateTo('home')" class="text-sm font-bold text-slate-600 hover:text-orange-600">
+                        الرئيسية
+                    </button>
+                </div>
+            </div>
+
+            <!-- View Level 1: Choose Year -->
+            <div id="academic-years-view" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div onclick="showSemesters(1)" class="bg-white rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all cursor-pointer border border-slate-200 flex flex-col items-center text-center group">
+                    <div class="w-20 h-20 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform shadow-inner">
+                        <i class="fa-solid fa-dice-one"></i>
+                    </div>
+                    <h3 class="text-2xl font-extrabold text-slate-800 mb-2">مواد السنة الأولى</h3>
+                    <p class="text-slate-500 text-sm">استعرض المقررات الخاصة بالفصلين الأول والثاني لطلاب السنة الأولى</p>
+                </div>
+
+                <div onclick="showSemesters(2)" class="bg-white rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all cursor-pointer border border-slate-200 flex flex-col items-center text-center group">
+                    <div class="w-20 h-20 rounded-2xl bg-slate-100 text-slate-800 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform shadow-inner">
+                        <i class="fa-solid fa-dice-two"></i>
+                    </div>
+                    <h3 class="text-2xl font-extrabold text-slate-800 mb-2">مواد السنة الثانية</h3>
+                    <p class="text-slate-500 text-sm">استعرض المقررات الخاصة بالفصلين الأول والثاني لطلاب السنة الثانية</p>
+                </div>
+            </div>
+
+            <!-- View Level 2: Choose Semester -->
+            <div id="academic-semesters-view" class="hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div onclick="showSubjects(currentYearSelection, 1)" class="bg-white rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all cursor-pointer border border-slate-200 flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-slate-800 text-white flex items-center justify-center text-2xl mb-4 group-hover:bg-orange-600 transition-colors shadow">
+                        1
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800">مواد الفصل الأول</h3>
+                </div>
+
+                <div onclick="showSubjects(currentYearSelection, 2)" class="bg-white rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all cursor-pointer border border-slate-200 flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-slate-800 text-white flex items-center justify-center text-2xl mb-4 group-hover:bg-orange-600 transition-colors shadow">
+                        2
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800">مواد الفصل الثاني</h3>
+                </div>
+            </div>
+
+            <!-- View Level 3: Subject Cards List -->
+            <div id="academic-subjects-view" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            </div>
+        </section>
+
+        <!-- ================= PAGE: TEACHERS (MODIFIED AS REQUESTED) ================= -->
+        <section id="page-teachers" class="page-section space-y-6">
+            <!-- Advice Banner -->
+            <div class="bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-orange-500/10 border-r-4 border-orange-500 p-4 rounded-2xl shadow-sm flex items-center space-x-3 space-x-reverse">
+                <div class="w-10 h-10 rounded-xl bg-orange-500 text-white flex items-center justify-center text-lg flex-shrink-0 shadow">
+                    <i class="fa-solid fa-users text-lg"></i>
+                </div>
+                <p class="text-slate-800 font-bold text-sm sm:text-base">نصيحة: «احترم أساتذتك والتزم بالتعليمات الإدارية والتربوية»</p>
+            </div>
+
+            <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+                <h2 class="text-2xl font-extrabold text-slate-800">تعرّف على أساتذة المعهد</h2>
+                <button onclick="navigateTo('home')" class="text-sm font-bold text-slate-600 hover:text-orange-600 flex items-center space-x-1 space-x-reverse">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>الرئيسية</span>
+                </button>
+            </div>
+
+            <!-- Teacher Cards Grid -->
+            <div id="teachersGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Dynamically injected via JavaScript with clean female titles -->
+            </div>
+        </section>
+
+        <!-- ================= PAGE: QUIZ (MODIFIED WITH DISTINCTIVE ICON) ================= -->
+        <section id="page-quiz" class="page-section space-y-6">
+            <!-- Advice Banner -->
+            <div class="bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-orange-500/10 border-r-4 border-orange-500 p-4 rounded-2xl shadow-sm flex items-center space-x-3 space-x-reverse">
+                <div class="w-10 h-10 rounded-xl bg-orange-500 text-white flex items-center justify-center text-lg flex-shrink-0 shadow">
+                    <i class="fa-solid fa-clipboard-question"></i>
+                </div>
+                <p class="text-slate-800 font-bold text-sm sm:text-base">نصيحة: «اختبر معلوماتك الرياضية والقانونية باستمرار لتطوير مستواك»</p>
+            </div>
+
+            <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <div class="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-xl">
+                        <i class="fa-solid fa-clipboard-question"></i>
+                    </div>
+                    <h2 class="text-2xl font-extrabold text-slate-800">اختبر نفسك</h2>
+                </div>
+                <button onclick="navigateTo('home')" class="text-sm font-bold text-slate-600 hover:text-orange-600 flex items-center space-x-1 space-x-reverse">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>الرئيسية</span>
+                </button>
+            </div>
+
+            <!-- Quiz Subject Selection View -->
+            <div id="quiz-subject-select" class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div onclick="startQuiz('football')" class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all cursor-pointer border border-slate-200 text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-futbol"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">كرة القدم</h3>
+                    <p class="text-xs text-slate-500">10 أسئلة دقيقة حول أبعاد الملعب والمرمى واللوائح الرسمية</p>
+                </div>
+
+                <div onclick="startQuiz('basketball')" class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all cursor-pointer border border-slate-200 text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-basketball"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">كرة السلة</h3>
+                    <p class="text-xs text-slate-500">10 أسئلة تتناول أبعاد الملعب، ارتفاع السلة، والقوانين</p>
+                </div>
+
+                <div onclick="startQuiz('swimming')" class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all cursor-pointer border border-slate-200 text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-person-swimming"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">السباحة</h3>
+                    <p class="text-xs text-slate-500">10 أسئلة حول قياسات الأحواض، السباقات ورشقات الانطلاق</p>
+                </div>
+            </div>
+
+            <!-- Active Quiz Screen -->
+            <div id="quiz-active-screen" class="hidden bg-white p-6 sm:p-8 rounded-2xl shadow-lg border border-slate-200 space-y-6 max-w-2xl mx-auto">
+                <div class="flex items-center justify-between border-b pb-4">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-clipboard-question text-orange-500 text-lg"></i>
+                        <span id="quiz-subject-title" class="text-lg font-bold text-orange-600"></span>
+                    </div>
+                    <span id="quiz-progress" class="text-sm font-semibold text-slate-500">السؤال 1 من 10</span>
+                </div>
+
+                <h3 id="quiz-question-text" class="text-lg sm:text-xl font-extrabold text-slate-800 leading-relaxed"></h3>
+
+                <div id="quiz-options-container" class="space-y-3">
+                </div>
+
+                <div class="pt-4 flex justify-end">
+                    <button id="quiz-next-btn" onclick="nextQuizQuestion()" disabled class="bg-orange-600 hover:bg-orange-700 text-white font-bold px-6 py-2.5 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                        السؤال التالي
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz Results Screen -->
+            <div id="quiz-results-screen" class="hidden bg-white p-6 sm:p-8 rounded-2xl shadow-lg border border-slate-200 space-y-6 max-w-2xl mx-auto text-center">
+                <div class="w-20 h-20 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-3xl mx-auto shadow-inner">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <h3 class="text-2xl font-black text-slate-800">نتيجة الاختبار</h3>
+                <p id="quiz-score-text" class="text-xl font-bold text-slate-700"></p>
+
+                <div id="quiz-review-container" class="text-right space-y-4 max-h-80 overflow-y-auto p-4 bg-slate-50 rounded-xl border border-slate-200">
+                </div>
+
+                <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4">
+                    <button onclick="restartCurrentQuiz()" class="bg-orange-600 hover:bg-orange-700 text-white font-bold px-6 py-2.5 rounded-xl transition-colors">
+                        إعادة الاختبار
+                    </button>
+                    <button onclick="resetQuizView()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-6 py-2.5 rounded-xl transition-colors">
+                        اختيار مادة أخرى
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE: GAMES ================= -->
+        <section id="page-games" class="page-section space-y-6">
+            <!-- Advice Banner -->
+            <div class="bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-orange-500/10 border-r-4 border-orange-500 p-4 rounded-2xl shadow-sm flex items-center space-x-3 space-x-reverse">
+                <div class="w-10 h-10 rounded-xl bg-orange-500 text-white flex items-center justify-center text-lg flex-shrink-0 shadow">
+                    <i class="fa-solid fa-gamepad"></i>
+                </div>
+                <p class="text-slate-800 font-bold text-sm sm:text-base">نصيحة: «الرياضة متعة وتحدٍّ والتزام بالقواعد»</p>
+            </div>
+
+            <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+                <h2 class="text-2xl font-extrabold text-slate-800">ألعب</h2>
+                <div class="flex items-center space-x-2 space-x-reverse">
+                    <button id="games-back-btn" onclick="showGamesList()" class="hidden text-sm font-bold bg-slate-200 text-slate-700 hover:bg-slate-300 px-3.5 py-1.5 rounded-xl transition-colors flex items-center space-x-1 space-x-reverse">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <span>قائمة الألعاب</span>
+                    </button>
+                    <button onclick="navigateTo('home')" class="text-sm font-bold text-slate-600 hover:text-orange-600">
+                        الرئيسية
+                    </button>
+                </div>
+            </div>
+
+            <!-- Games Selection List -->
+            <div id="games-list-view" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Game 1 Card -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all border border-slate-200 flex flex-col justify-between text-center">
+                    <div>
+                        <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl mx-auto mb-4">
+                            <i class="fa-solid fa-futbol"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">ضربات ترجيح كرة القدم</h3>
+                        <p class="text-xs text-slate-500 mb-6">سدّد الكرات بالسحب نحو المرمى ضد حارس متحرّك خلال 60 ثانية.</p>
+                    </div>
+                    <button onclick="openGame('penalty')" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 px-4 rounded-xl transition-colors shadow">
+                        ابدأ اللعب
+                    </button>
+                </div>
+
+                <!-- Game 2 Card -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all border border-slate-200 flex flex-col justify-between text-center">
+                    <div>
+                        <div class="w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-3xl mx-auto mb-4">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">اختبر رد فعلك</h3>
+                        <p class="text-xs text-slate-500 mb-6">قس سرعة استجابتك بالمللي ثانية فور تغير الشاشة إلى اللون الأخضر.</p>
+                    </div>
+                    <button onclick="openGame('reaction')" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 px-4 rounded-xl transition-colors shadow">
+                        ابدأ اللعب
+                    </button>
+                </div>
+
+                <!-- Game 3 Card -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all border border-slate-200 flex flex-col justify-between text-center">
+                    <div>
+                        <div class="w-16 h-16 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-3xl mx-auto mb-4">
+                            <i class="fa-solid fa-clone"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">مطابقة الكروت الرياضية</h3>
+                        <p class="text-xs text-slate-500 mb-6">لعبة ذاكرة ممتعة بمطابقة الأزواج المكونة من رموز وإيقونات رياضية.</p>
+                    </div>
+                    <button onclick="openGame('memory')" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 px-4 rounded-xl transition-colors shadow">
+                        ابدأ اللعب
+                    </button>
+                </div>
+
+                <!-- Game 4 Card -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all border border-slate-200 flex flex-col justify-between text-center">
+                    <div>
+                        <div class="w-16 h-16 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-3xl mx-auto mb-4">
+                            <i class="fa-solid fa-list-ol"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">تحدّي ترتيب مراحل الدرس الرياضي</h3>
+                        <p class="text-xs text-slate-500 mb-6">رتب الكروت الستة بالتسلسل الصحيح لمراحل درس التربية الرياضية.</p>
+                    </div>
+                    <button onclick="openGame('order')" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 px-4 rounded-xl transition-colors shadow">
+                        ابدأ اللعب
+                    </button>
+                </div>
+            </div>
+
+            <!-- GAME 1: Penalty Shootout -->
+            <div id="game-penalty" class="hidden space-y-4 max-w-2xl mx-auto">
+                <div class="bg-slate-900 text-white p-4 rounded-2xl flex justify-between items-center text-sm sm:text-base font-bold shadow">
+                    <div>الأهداف: <span id="penalty-score" class="text-orange-400 font-extrabold">0</span></div>
+                    <div>التصديات: <span id="penalty-saves" class="text-rose-400 font-extrabold">0</span></div>
+                    <div>الوقت: <span id="penalty-timer" class="text-yellow-400 font-extrabold">60</span> ثانية</div>
+                </div>
+
+                <div class="relative bg-slate-800 rounded-3xl p-2 shadow-2xl overflow-hidden touch-none flex flex-col items-center border border-slate-700">
+                    <canvas id="penaltyCanvas" width="500" height="400" class="rounded-2xl w-full max-w-full h-auto cursor-crosshair"></canvas>
+                    <p class="text-xs text-slate-300 mt-2">اسحب إصبعك/الفأرة نحو المرمى للتسديد وتحديد القوة والاتجاه!</p>
+                </div>
+
+                <div id="penalty-controls" class="flex justify-center pt-2">
+                    <button onclick="startPenaltyGame()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-8 py-3 rounded-xl shadow transition-colors">
+                        ابدأ اللعبة الجديدة
+                    </button>
+                </div>
+            </div>
+
+            <!-- GAME 2: Reaction Time -->
+            <div id="game-reaction" class="hidden space-y-6 max-w-xl mx-auto text-center">
+                <div id="reaction-box" onclick="handleReactionClick()" class="h-64 rounded-3xl bg-slate-800 text-white flex flex-col items-center justify-center p-6 shadow-2xl cursor-pointer transition-colors select-none border border-slate-700">
+                    <i id="reaction-icon" class="fa-solid fa-stopwatch text-5xl mb-4 text-orange-400"></i>
+                    <h3 id="reaction-title" class="text-2xl font-black mb-2">اضغط هنا للبدء</h3>
+                    <p id="reaction-desc" class="text-sm opacity-80">انتظر تحوّل المساحة للون الأخضر ثم اضغط فورًا!</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                        <span class="block text-xs text-slate-500 font-bold mb-1">النتيجة الأخيرة</span>
+                        <span id="reaction-last" class="text-xl font-extrabold text-slate-800">-- ms</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                        <span class="block text-xs text-slate-500 font-bold mb-1">أفضل نتيجة</span>
+                        <span id="reaction-best" class="text-xl font-extrabold text-emerald-600">-- ms</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GAME 3: Memory Cards -->
+            <div id="game-memory" class="hidden space-y-4 max-w-4xl mx-auto">
+                <div class="flex justify-between items-center bg-white p-4 rounded-2xl shadow-sm border border-slate-200 text-sm font-bold text-slate-700">
+                    <div>المحاولات: <span id="memory-moves" class="text-orange-600 font-extrabold">0</span></div>
+                    <div>الأزواج المكتملة: <span id="memory-pairs" class="text-emerald-600 font-extrabold">0 / 8</span></div>
+                    <button onclick="startMemoryGame()" class="bg-slate-800 hover:bg-slate-900 text-white px-4 py-1.5 rounded-xl text-xs font-bold transition-colors shadow">
+                        إعادة اللعبة
+                    </button>
+                </div>
+
+                <div id="memory-grid" class="grid grid-cols-4 sm:grid-cols-4 gap-3 sm:gap-4">
+                    <!-- Memory cards injected via JS -->
+                </div>
+            </div>
+
+            <!-- GAME 4: Lesson Stages Order Challenge -->
+            <div id="game-order" class="hidden space-y-6 max-w-2xl mx-auto">
+                <!-- Game Header Info -->
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex justify-between items-center text-sm font-bold text-slate-800">
+                    <div class="flex items-center space-x-2 space-x-reverse">
+                        <i class="fa-solid fa-star text-amber-500 text-lg"></i>
+                        <span>النقاط: <span id="order-score" class="text-orange-600 font-extrabold">0</span></span>
+                    </div>
+                    <div class="flex items-center space-x-2 space-x-reverse">
+                        <i class="fa-solid fa-rotate-right text-sky-500 text-lg"></i>
+                        <span>المحاولات: <span id="order-attempts" class="text-slate-700 font-extrabold">0</span></span>
+                    </div>
+                </div>
+
+                <!-- Game Container Card -->
+                <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-lg border border-slate-200 space-y-6">
+                    <div class="text-center space-y-2">
+                        <h3 class="text-xl font-extrabold text-slate-800">تحدّي ترتيب مراحل الدرس الرياضي</h3>
+                        <p class="text-xs sm:text-sm text-slate-500">قم بترتيب الكروت التالية حسب التسلسل الصحيح لدرس التربية الرياضية باستخدام الأزرار (أعلى / أسفل):</p>
+                    </div>
+
+                    <!-- Cards Container -->
+                    <div id="order-cards-list" class="space-y-3">
+                        <!-- Cards injected dynamically via JS -->
+                    </div>
+
+                    <!-- Feedback Alert Box -->
+                    <div id="order-msg-box" class="hidden p-4 rounded-xl font-bold text-sm text-center"></div>
+
+                    <!-- Solution Display Box -->
+                    <div id="order-solution-box" class="hidden p-4 rounded-xl bg-sky-50 border border-sky-200 text-sky-900 text-sm space-y-2">
+                        <div class="font-extrabold flex items-center gap-2">
+                            <i class="fa-solid fa-circle-info text-sky-600"></i>
+                            <span>التسلسل الصحيح لمراحل الدرس الرياضي:</span>
+                        </div>
+                        <ol class="list-decimal list-inside space-y-1 font-bold text-xs sm:text-sm pr-2">
+                            <li>الإحماء</li>
+                            <li>التمرينات</li>
+                            <li>النشاط التعليمي</li>
+                            <li>النشاط التطبيقي</li>
+                            <li>الألعاب والمسابقات</li>
+                            <li>الختام</li>
+                        </ol>
+                    </div>
+
+                    <!-- Buttons Group -->
+                    <div class="flex flex-wrap gap-3 justify-center pt-2">
+                        <button onclick="checkLessonOrder()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-xl transition-all shadow flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>تحقّق من الإجابة</span>
+                        </button>
+
+                        <button onclick="resetLessonOrder(true)" class="bg-slate-700 hover:bg-slate-800 text-white font-bold px-5 py-2.5 rounded-xl transition-all shadow flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-shuffle"></i>
+                            <span>إعادة المحاولة</span>
+                        </button>
+
+                        <button id="show-solution-btn" onclick="revealLessonSolution()" class="hidden bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold px-5 py-2.5 rounded-xl transition-all shadow flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-eye"></i>
+                            <span>عرض الحل الصحيح</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-slate-900 text-white border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center border-b border-slate-800 pb-8">
+                <!-- Right Side: Location -->
+                <div class="space-y-2">
+                    <h4 class="text-sm font-bold text-slate-400">موقع المعهد:</h4>
+                    <div class="flex items-center space-x-2 space-x-reverse text-base sm:text-lg font-extrabold text-orange-400">
+                        <i class="fa-solid fa-location-dot text-rose-500 text-xl flex-shrink-0"></i>
+                        <span>بجانب مشفى العباسيين - دمشق</span>
+                    </div>
+                </div>
+
+                <!-- Left Side: Complaints Phone -->
+                <div class="space-y-2 md:text-left">
+                    <h4 class="text-sm font-bold text-slate-400">رقم الشكاوى والاستفسار:</h4>
+                    <a href="tel:0944845413" class="inline-flex items-center space-x-2 space-x-reverse text-base sm:text-lg font-extrabold text-emerald-400 hover:underline dir-ltr">
+                        <i class="fa-solid fa-phone-volume text-emerald-500 text-xl flex-shrink-0"></i>
+                        <span class="tracking-widest">0944845413</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bottom Copyright -->
+            <div class="pt-6 text-center text-xs sm:text-sm text-slate-400 font-medium">
+                تم صنع هذا الموقع بواسطة Ryan Alshalil
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        /* ================= NAVIGATION & ROUTING ================= */
+        function navigateTo(pageId) {
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.toggle('is-current', (btn.getAttribute('onclick') || '').includes("'" + pageId + "'"));
+                if (btn.classList.contains('is-current')) btn.setAttribute('aria-current', 'page');
+                else btn.removeAttribute('aria-current');
+            });
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            const target = document.getElementById(`page-${pageId}`);
+            if (target) {
+                target.classList.add('active');
+            }
+            document.getElementById('mobileMenu').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (pageId === 'academic-year') {
+                resetAcademicView();
+            }
+            if (pageId === 'games') {
+                showGamesList();
+            }
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        }
+
+        /* ================= ACADEMIC YEAR LOGIC ================= */
+        let currentYearSelection = 1;
+        let currentAcademicStep = 1;
+
+        const subjectsData = {
+            1: {
+                1: [
+                    { name: 'كرة القدم', cat: 'نظري وعملي', bg: 'bg-gradient-to-br from-emerald-600 to-green-800' },
+                    { name: 'كرة الطائرة', cat: 'نظري وعملي', bg: 'bg-gradient-to-br from-blue-600 to-amber-500' },
+                    { name: 'طرق تدريس', cat: 'نظري', bg: 'bg-gradient-to-br from-slate-700 to-slate-900' },
+                    { name: 'تمرينات', cat: 'نظري وعملي', bg: 'bg-gradient-to-br from-orange-600 to-red-600' },
+                    { name: 'ألعاب صغيرة', cat: 'نظري وعملي', bg: 'bg-gradient-to-br from-purple-500 via-pink-500 to-amber-500' },
+                    { name: 'علم التشريح', cat: 'نظري', bg: 'bg-gradient-to-br from-slate-500 to-slate-700' },
+                    { name: 'ألعاب قوى', cat: 'نظري وعملي', bg: 'bg-gradient-to-br from-red-600 to-yellow-500' },
+                    { name: 'مبادئ التربية', cat: 'نظري', bg: 'bg-gradient-to-br from-purple-700 to-indigo-900' }
+                ],
+                2: [
+                    { name: 'علم وظائف الأعضاء', cat: 'نظري', bg: 'bg-gradient-to-br from-rose-800 to-rose-950' },
+                    { name: 'جمباز', cat: 'نظري وعملي', bg: 'bg-gradient-to-br from-amber-500 to-pink-600' },
+                    { name: 'مبادئ التربية', cat: 'نظري', bg: 'bg-gradient-to-br from-slate-800 to-indigo-950' },
+                    { name: 'تطبيقات', cat: 'عملي', bg: 'bg-gradient-to-br from-emerald-800 to-teal-950' },
+                    { name: 'كرة السلة', cat: 'نظري وعملي', bg: 'bg-gradient-to-br from-orange-500 to-amber-700' },
+                    { name: 'كرة اليد', cat: 'نظري وعملي', bg: 'bg-gradient-to-br from-slate-600 to-red-700' },
+                    { name: 'اللغة العربية', cat: 'نظري', bg: 'bg-gradient-to-br from-amber-800 to-amber-950' },
+                    { name: 'السباحة', cat: 'نظري وعملي', bg: 'bg-gradient-to-br from-sky-500 to-blue-700' }
+                ]
+            },
+            2: {
+                1: [
+                    { name: 'علم نفس', cat: 'نظري', bg: 'bg-gradient-to-br from-purple-600 to-purple-900' },
+                    { name: 'جمباز', cat: 'نظري وعملي', bg: 'bg-gradient-to-br from-amber-400 to-yellow-600' },
+                    { name: 'اللغة الأجنبية', cat: 'نظري', bg: 'bg-gradient-to-br from-sky-400 to-blue-600' },
+                    { name: 'كرة الطاولة', cat: 'نظري وعملي', bg: 'bg-gradient-to-br from-emerald-600 to-slate-700' },
+                    { name: 'الريشة الطائرة', cat: 'نظري وعملي', bg: 'bg-gradient-to-br from-slate-100 to-sky-300 text-slate-800' },
+                    { name: 'الطب الرياضي', cat: 'نظري', bg: 'bg-gradient-to-br from-teal-600 to-emerald-800' },
+                    { name: 'كرة اليد', cat: 'نظري وعملي', bg: 'bg-gradient-to-br from-red-800 to-rose-950' },
+                    { name: 'كرة السلة', cat: 'نظري وعملي', bg: 'bg-gradient-to-br from-orange-600 to-amber-600' }
+                ],
+                2: [
+                    { name: 'الإدارة والتنظيم', cat: 'نظري', bg: 'bg-gradient-to-br from-slate-600 to-slate-800' },
+                    { name: 'ألعاب قوى', cat: 'نظري وعملي', bg: 'bg-gradient-to-br from-red-600 to-rose-800' },
+                    { name: 'التمرينات', cat: 'نظري وعملي', bg: 'bg-gradient-to-br from-orange-500 to-amber-600' },
+                    { name: 'كرة القدم', cat: 'نظري وعملي', bg: 'bg-gradient-to-br from-emerald-500 to-green-700' },
+                    { name: 'كرة الطائرة', cat: 'نظري وعملي', bg: 'bg-gradient-to-br from-blue-700 to-slate-900' },
+                    { name: 'علم التدريب', cat: 'نظري', bg: 'bg-gradient-to-br from-slate-900 via-amber-700 to-slate-900' },
+                    { name: 'حاسوب', cat: 'نظري وعملي', bg: 'bg-gradient-to-br from-cyan-600 to-blue-800' }
+                ]
+            }
+        };
+
+        function resetAcademicView() {
+            currentAcademicStep = 1;
+            document.getElementById('academic-years-view').classList.remove('hidden');
+            document.getElementById('academic-semesters-view').classList.add('hidden');
+            document.getElementById('academic-subjects-view').classList.add('hidden');
+            document.getElementById('academic-back-btn').classList.add('hidden');
+            document.getElementById('academic-title').innerText = 'السنة الدراسية';
+            document.getElementById('academic-advice-text').innerText = 'نصيحة: «نظّم وقتك بين الدراسة النظرية والتطبيق العملي»';
+        }
+
+        function showSemesters(year) {
+            currentYearSelection = year;
+            currentAcademicStep = 2;
+            document.getElementById('academic-years-view').classList.add('hidden');
+            document.getElementById('academic-semesters-view').classList.remove('hidden');
+            document.getElementById('academic-subjects-view').classList.add('hidden');
+            document.getElementById('academic-back-btn').classList.remove('hidden');
+            document.getElementById('academic-title').innerText = year === 1 ? 'السنة الأولى' : 'السنة الثانية';
+            document.getElementById('academic-advice-text').innerText = 'نصيحة: «احرص على متابعة موادك الدراسية بانتظام»';
+        }
+
+        function showSubjects(year, semester) {
+            currentAcademicStep = 3;
+            document.getElementById('academic-semesters-view').classList.add('hidden');
+            const container = document.getElementById('academic-subjects-view');
+            container.classList.remove('hidden');
+            container.innerHTML = '';
+
+            document.getElementById('academic-title').innerText = (year === 1 ? 'السنة الأولى' : 'السنة الثانية') + ' - ' + (semester === 1 ? 'الفصل الأول' : 'الفصل الثاني');
+
+            const list = subjectsData[year][semester] || [];
+            list.forEach(sub => {
+                const isLight = sub.bg.includes('text-slate-800');
+                const textColor = isLight ? 'text-slate-900' : 'text-white';
+                
+                const card = document.createElement('div');
+                card.className = `${sub.bg} ${textColor} rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-40 border border-white/10`;
+                
+                card.innerHTML = `
+                    <div class="font-extrabold text-xl leading-snug">${sub.name}</div>
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-black/20 backdrop-blur-sm border border-white/20">
+                            ${sub.cat}
+                        </span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function academicGoBack() {
+            if (currentAcademicStep === 3) {
+                showSemesters(currentYearSelection);
+            } else if (currentAcademicStep === 2) {
+                resetAcademicView();
+            }
+        }
+
+        /* ================= TEACHERS SECTION LOGIC (FIXED FEMALE NAMES & TITLES) ================= */
+        const teachersList = [
+            { name: "الأستاذ أحمد خضور", subject: "السباحة / كرة الطاولة", type: "male" },
+            { name: "الأستاذ أسامة حسين", subject: "كرة السلة", type: "male" },
+            { name: "الأستاذ إبراهيم نصر", subject: "مبادئ التربية / علم النفس", type: "male" },
+            { name: "الآنسة ربا", subject: "اللغة العربية / اللغة الأجنبية / الحاسوب", type: "female" },
+            { name: "الأستاذ مهند ناصر", subject: "ألعاب القوى", type: "male" },
+            { name: "الأستاذ إبراهيم محمد", subject: "ألعاب القوى", type: "male" },
+            { name: "الأستاذ عمر", subject: "كرة الطائرة / الريشة الطائرة", type: "male" },
+            { name: "الآنسة جيانا", subject: "الطب الرياضي / الحاسوب", type: "female" },
+            { name: "الأستاذ بسام فرحات", subject: "التطبيقات / التمرينات", type: "male" },
+            { name: "الأستاذ نظام يوسف", subject: "التطبيقات / التمرينات", type: "male" },
+            { name: "الأستاذ نورس جمعة", subject: "كرة القدم / علم التدريب", type: "male" },
+            { name: "الآنسة أمل", subject: "علم التشريح / علم وظائف الأعضاء", type: "female" },
+            { name: "الأستاذ رازي الباسط", subject: "الجمباز", type: "male" },
+            { name: "الآنسة غادة الملحم", subject: "الجمباز", type: "female" },
+            { name: "الأستاذ مهران", subject: "الطب الرياضي", type: "male" },
+            { name: "الدكتور دانيال ذو الكفل", subject: "طرق التدريس / الإدارة والتنظيم", type: "male" },
+            { name: "الأستاذ مهند", subject: "ألعاب صغيرة", type: "male" },
+            { name: "الآنسة رغد", subject: "رئيس شعبة الإمتحانات", type: "female" },
+            { name: "الأستاذ غيث الدهموش المشهور", subject: "مدير المعهد", type: "manager" }
+        ];
+
+        function renderTeachers() {
+            const grid = document.getElementById('teachersGrid');
+            grid.innerHTML = '';
+
+            teachersList.forEach(t => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80 flex flex-col items-center text-center hover:shadow-xl transition-all";
+
+                if (t.type === 'male') {
+                    card.innerHTML = `
+                        <div class="w-20 h-20 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-3xl mb-4 border-2 border-blue-200 shadow-sm">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+                        <h3 class="font-extrabold text-slate-800 text-base mb-1">${t.name}</h3>
+                        <p class="text-xs font-medium text-slate-500">${t.subject}</p>
+                    `;
+                } else if (t.type === 'female') {
+                    // Exact requirement: "الآنسة (اسمها)" once without any duplicate "الآنسة" badge underneath
+                    card.innerHTML = `
+                        <div class="w-20 h-20 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center text-3xl mb-4 border-2 border-rose-200 shadow-sm">
+                            <i class="fa-solid fa-person-chalkboard"></i>
+                        </div>
+                        <h3 class="font-extrabold text-slate-800 text-base mb-2">${t.name}</h3>
+                        <p class="text-xs font-medium text-slate-500">${t.subject}</p>
+                    `;
+                } else if (t.type === 'manager') {
+                    card.className = "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white rounded-2xl p-6 shadow-xl border-2 border-amber-500/50 flex flex-col items-center text-center transform hover:scale-105 transition-all";
+                    card.innerHTML = `
+                        <div class="w-20 h-20 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-3xl mb-4 border-2 border-amber-400 shadow-lg">
+                            <i class="fa-solid fa-id-badge"></i>
+                        </div>
+                        <span class="px-3 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-xs mb-2">إدارة المعهد</span>
+                        <h3 class="font-black text-amber-300 text-lg mb-1">${t.name}</h3>
+                        <p class="text-xs font-semibold text-slate-300">${t.subject}</p>
+                    `;
+                }
+                grid.appendChild(card);
+            });
+        }
+
+        /* ================= QUIZ SECTION LOGIC ================= */
+        const quizDatabase = {
+            football: [
+                { q: "ما هو أقصى عدد للاعبين داخل الملعب لكل فريق في مباراة كرة القدم الرسمية؟", opts: ["11 لاعبًا", "9 إداريين", "12 لاعبًا", "10 أفرع"], a: 0 },
+                { q: "ما هي مدة الشوط الواحد في مباراة كرة القدم الرسمية للرجال؟", opts: ["40 دقيقة", "45 دقيقة", "50 دقيقة", "60 دقيقة"], a: 1 },
+                { q: "أي عضو في جسم اللاعب غير الحارس يمنع لمس الكرة به قصداً؟", opts: ["الرأس", "القدم", "اليد والذراع", "الصدر"], a: 2 },
+                { q: "ما هو الطول الرسمي القياسي لمرمى كرة القدم بين القائمين؟", opts: ["6.44 أمتار", "7.32 أمتار", "8.20 أمتار", "7.50 أمتار"], a: 1 },
+                { q: "كم يبلغ ارتفاع العارضة عن سطح الأرض في المرمى القانوني؟", opts: ["2.44 أمتار", "2.10 أمتار", "2.60 أمتار", "2.30 أمتار"], a: 0 },
+                { q: "ما هو نطاق محيط الكرة القانونية المستخدمة في المباريات الرسمية (حجم 5)؟", opts: ["60 - 62 سم", "68 - 70 سم", "72 - 75 سم", "65 - 67 سم"], a: 1 },
+                { q: "ما هو طول خط اللمس (الطول) المعتمد دولياً في الملاعب القانونية لمباريات FIFA الدولية؟", opts: ["90 - 100 متر", "100 - 110 أمتار", "110 - 120 متر", "95 - 105 أمتار"], a: 1 },
+                { q: "كم يبعد قوس نقطة الجزاء (منطقة الجزاء) عن نقطة الجزاء نفسها؟", opts: ["9.15 أمتار", "11 متراً", "7.32 أمتار", "16.5 متراً"], a: 0 },
+                { q: "ما هو الوزن المعتمد للكرة عند بداية المباراة القانونية؟", opts: ["350 - 390 غرام", "410 - 450 غرام", "460 - 500 غرام", "500 - 550 غرام"], a: 1 },
+                { q: "كم تبلغ المسافة بين نقطة تنفيذ ركلة الجزاء وخط المرمى؟", opts: ["9.15 أمتار", "11 متراً (12 ياردة)", "16.5 متراً", "10 أمتار"], a: 1 }
+            ],
+            basketball: [
+                { q: "كم عدد اللاعبين الأساسيين داخل الملعب لكل فريق في كرة السلة؟", opts: ["5 لاعبين", "6 لاعبين", "7 لاعبين", "11 لاعبًا"], a: 0 },
+                { q: "كم عدد أرباع المباراة الرسمية في كرة السلة للمحترفين (FIBA)؟", opts: ["شوطان", "4 أرباع", "3 أرباع", "5 أرباع"], a: 1 },
+                { q: "كم مدة الربع الواحد في مباريات الاتحاد الدولي لكرة السلة (FIBA)؟", opts: ["8 دقائق", "10 دقائق", "12 دقيقة", "15 دقيقة"], a: 1 },
+                { q: "كم يبلغ الارتفاع القانوني لحلقة السلة عن سطح الأرض؟", opts: ["2.90 متر", "3.05 أمتار", "3.15 أمتار", "3.25 أمتار"], a: 1 },
+                { q: "ما هي أبعاد ملعب كرة السلة القانوني (الطول × العرض) وفق FIBA؟", opts: ["28 × 15 متراً", "30 × 16 متراً", "26 × 14 متراً", "32 × 18 متراً"], a: 0 },
+                { q: "كم ثانية يُمنح الفريق للهجوم وتسديد الكرة ونقلها نحو سلة الخصم؟", opts: ["14 ثانية", "24 ثانية", "30 ثانية", "8 ثوانٍ"], a: 1 },
+                { q: "ما هي المسافة الرسمية لخط النقاط الثلاث عن مركز السلة وفق قوانين FIBA؟", opts: ["6.25 أمتار", "6.75 أمتار", "7.24 أمتار", "6.50 أمتار"], a: 1 },
+                { q: "كم يبلغ محيط الكرة القياسية المقاس 7 الخاصة بمنافسات الرجال؟", opts: ["70 - 72 سم", "75 - 78 سم", "80 - 82 سم", "68 - 70 سم"], a: 1 },
+                { q: "كم ثانية يحق للاعب المهاجم البقاء داخل منطقة الرمية الحرة (المنطقة المحرمة)؟", opts: ["3 ثوانٍ", "5 ثوانٍ", "8 ثوانٍ", "10 ثوانٍ"], a: 0 },
+                { q: "ما هو ارتفاع الحافة السفلى للوحة الخلفية (الهدف) عن الأرض؟", opts: ["2.75 متر", "2.90 متر", "3.00 أمتار", "2.60 متر"], a: 1 }
+            ],
+            swimming: [
+                { q: "ما هو الطول القياسي للمسبح الأولمبي الدولي الرسمي؟", opts: ["25 متراً", "50 متراً", "100 متر", "75 متراً"], a: 1 },
+                { q: "أي من أنواع السباحة التالية يُعتبر أسرع أنواع السباحة في المسابقات؟", opts: ["سباحة الصدر", "السباحة الحرة (الزحف)", "سباحة الفراشة", "سباحة الظهر"], a: 1 },
+                { q: "كم عدد حارات السباحة الرئيسية في المسبح الأولمبي المعتمد للمسابقات؟", opts: ["6 حارات", "8 إلى 10 حارات", "12 حارة", "5 حارات"], a: 1 },
+                { q: "كم يبلغ عرض الحارة الواحدة في المسبح الأولمبي الرسمي؟", opts: ["2.0 متر", "2.5 متر", "3.0 أمتار", "1.8 متر"], a: 1 },
+                { q: "في سباحة الظهر، كيف يبدأ السباحون الانطلاق؟", opts: ["من على منصة الانطلاق", "من داخل الماء ممسكين بالحواف", "بالقفز من الجانب", "بالجري والقفز"], a: 1 },
+                { q: "ما هو العمق الأدنى الموصى به للمسبح الأولمبي الحديث وفق الاتحاد الدولي للسباحة؟", opts: ["1.5 متر", "2.0 متر", "3.0 أمتار", "1.0 متر"], a: 1 },
+                { q: "ما هي درجة حرارة الماء القانونية المعتمدة للمسابقات الأولمبية؟", opts: ["20 - 22°C", "25 - 28°C", "30 - 32°C", "18 - 20°C"], a: 1 },
+                { q: "ما هي أطول مسافة سباق فردي للمسبح الأولمبي في الفعاليات الحرة للرجال؟", opts: ["800 متر", "1500 متر", "3000 متر", "5000 متر"], a: 1 },
+                { q: "في التتابع المتنوع (Medley Relay)، ما هو الترتيب القانوني لأنواع السباحة؟", opts: ["حرة، ظهر، صدر، فراشة", "ظهر، صدر، فراشة، حرة", "فراشة، ظهر، صدر، حرة", "صدر، ظهر، فراشة، حرة"], a: 1 },
+                { q: "كم تبعد علامات الحبال الطافية (تغير اللون) عن جدار الحوض للتنبيه بالدوران؟", opts: ["3 أمتار", "5 أمتار", "7 أمتار", "10 أمتار"], a: 1 }
+            ]
+        };
+
+        let currentQuizSubject = '';
+        let currentQuizIndex = 0;
+        let quizAnswers = [];
+
+        function resetQuizView() {
+            document.getElementById('quiz-subject-select').classList.remove('hidden');
+            document.getElementById('quiz-active-screen').classList.add('hidden');
+            document.getElementById('quiz-results-screen').classList.add('hidden');
+        }
+
+        function startQuiz(subjKey) {
+            currentQuizSubject = subjKey;
+            currentQuizIndex = 0;
+            quizAnswers = [];
+
+            document.getElementById('quiz-subject-select').classList.add('hidden');
+            document.getElementById('quiz-results-screen').classList.add('hidden');
+            document.getElementById('quiz-active-screen').classList.remove('hidden');
+
+            const names = { football: 'كرة القدم', basketball: 'كرة السلة', swimming: 'السباحة' };
+            document.getElementById('quiz-subject-title').innerText = 'اختبار ' + names[subjKey];
+
+            showQuizQuestion();
+        }
+
+        function showQuizQuestion() {
+            const list = quizDatabase[currentQuizSubject];
+            const qObj = list[currentQuizIndex];
+
+            document.getElementById('quiz-progress').innerText = `السؤال ${currentQuizIndex + 1} من ${list.length}`;
+            document.getElementById('quiz-question-text').innerText = qObj.q;
+
+            const optsContainer = document.getElementById('quiz-options-container');
+            optsContainer.innerHTML = '';
+
+            const nextBtn = document.getElementById('quiz-next-btn');
+            nextBtn.disabled = true;
+
+            qObj.opts.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-right p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-orange-50 hover:border-orange-300 font-bold text-slate-800 text-sm sm:text-base transition-colors flex items-center justify-between";
+                btn.innerHTML = `<span>${opt}</span><i class="fa-regular fa-circle text-slate-400"></i>`;
+                
+                btn.onclick = () => {
+                    Array.from(optsContainer.children).forEach(c => {
+                        c.className = "w-full text-right p-4 rounded-xl border border-slate-200 bg-slate-50 font-bold text-slate-800 text-sm sm:text-base transition-colors flex items-center justify-between";
+                        c.querySelector('i').className = "fa-regular fa-circle text-slate-400";
+                    });
+                    btn.className = "w-full text-right p-4 rounded-xl border-2 border-orange-500 bg-orange-50 font-bold text-orange-950 text-sm sm:text-base transition-colors flex items-center justify-between";
+                    btn.querySelector('i').className = "fa-solid fa-circle-check text-orange-600";
+                    
+                    quizAnswers[currentQuizIndex] = idx;
+                    nextBtn.disabled = false;
+                };
+                optsContainer.appendChild(btn);
+            });
+        }
+
+        function nextQuizQuestion() {
+            const list = quizDatabase[currentQuizSubject];
+            if (currentQuizIndex < list.length - 1) {
+                currentQuizIndex++;
+                showQuizQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            document.getElementById('quiz-active-screen').classList.add('hidden');
+            document.getElementById('quiz-results-screen').classList.remove('hidden');
+
+            const list = quizDatabase[currentQuizSubject];
+            let score = 0;
+
+            const reviewContainer = document.getElementById('quiz-review-container');
+            reviewContainer.innerHTML = '';
+
+            list.forEach((qObj, idx) => {
+                const userA = quizAnswers[idx];
+                const isCorrect = (userA === qObj.a);
+                if (isCorrect) score++;
+
+                const item = document.createElement('div');
+                item.className = `p-3 rounded-xl border ${isCorrect ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-50 border-rose-200'}`;
+                item.innerHTML = `
+                    <div class="font-bold text-slate-800 text-sm mb-1">${idx + 1}. ${qObj.q}</div>
+                    <div class="text-xs ${isCorrect ? 'text-emerald-700 font-bold' : 'text-rose-700 font-bold'}">
+                        إجابتك: ${qObj.opts[userA] !== undefined ? qObj.opts[userA] : 'لم تجب'} ${isCorrect ? '✓' : '✗'}
+                    </div>
+                    ${!isCorrect ? `<div class="text-xs text-slate-600">الإجابة الصحيحة: ${qObj.opts[qObj.a]}</div>` : ''}
+                `;
+                reviewContainer.appendChild(item);
+            });
+
+            document.getElementById('quiz-score-text').innerText = `حققت ${score} من أصل ${list.length} نقاط`;
+        }
+
+        function restartCurrentQuiz() {
+            startQuiz(currentQuizSubject);
+        }
+
+        /* ================= GAMES CONTROLLER ================= */
+        function showGamesList() {
+            document.getElementById('games-list-view').classList.remove('hidden');
+            document.getElementById('game-penalty').classList.add('hidden');
+            document.getElementById('game-reaction').classList.add('hidden');
+            document.getElementById('game-memory').classList.add('hidden');
+            document.getElementById('game-order').classList.add('hidden');
+            document.getElementById('games-back-btn').classList.add('hidden');
+            stopPenaltyTimer();
+        }
+
+        function openGame(gameKey) {
+            document.getElementById('games-list-view').classList.add('hidden');
+            document.getElementById('games-back-btn').classList.remove('hidden');
+
+            if (gameKey === 'penalty') {
+                document.getElementById('game-penalty').classList.remove('hidden');
+                initPenaltyCanvas();
+            } else if (gameKey === 'reaction') {
+                document.getElementById('game-reaction').classList.remove('hidden');
+                resetReactionGame();
+            } else if (gameKey === 'memory') {
+                document.getElementById('game-memory').classList.remove('hidden');
+                startMemoryGame();
+            } else if (gameKey === 'order') {
+                document.getElementById('game-order').classList.remove('hidden');
+                resetLessonOrder(true);
+            }
+        }
+
+        /* ----- GAME 1: PENALTY SHOOTOUT ----- */
+        let pCanvas, pCtx;
+        let pTimer = 60;
+        let pTimerInterval = null;
+        let pScore = 0;
+        let pSaves = 0;
+        let pGameActive = false;
+
+        let keeper = { x: 210, width: 80, height: 60, dir: 1, speed: 3 };
+        let ball = { x: 250, y: 350, radius: 14, vx: 0, vy: 0, isMoving: false };
+        let dragStart = null;
+
+        function initPenaltyCanvas() {
+            pCanvas = document.getElementById('penaltyCanvas');
+            pCtx = pCanvas.getContext('2d');
+
+            pCanvas.onmousedown = (e) => startDrag(getCanvasPos(e));
+            pCanvas.onmousemove = (e) => dragMove(getCanvasPos(e));
+            pCanvas.onmouseup = (e) => endDrag(getCanvasPos(e));
+
+            pCanvas.ontouchstart = (e) => { e.preventDefault(); startDrag(getTouchPos(e)); };
+            pCanvas.ontouchmove = (e) => { e.preventDefault(); dragMove(getTouchPos(e)); };
+            pCanvas.ontouchend = (e) => { e.preventDefault(); endDrag(null); };
+
+            drawPenaltyScene();
+        }
+
+        function getCanvasPos(e) {
+            const rect = pCanvas.getBoundingClientRect();
+            return {
+                x: (e.clientX - rect.left) * (pCanvas.width / rect.width),
+                y: (e.clientY - rect.top) * (pCanvas.height / rect.height)
+            };
+        }
+
+        function getTouchPos(e) {
+            if (!e.touches[0]) return null;
+            const rect = pCanvas.getBoundingClientRect();
+            return {
+                x: (e.touches[0].clientX - rect.left) * (pCanvas.width / rect.width),
+                y: (e.touches[0].clientY - rect.top) * (pCanvas.height / rect.height)
+            };
+        }
+
+        let lastDragPos = null;
+
+        function startDrag(pos) {
+            if (!pGameActive || ball.isMoving) return;
+            dragStart = pos;
+            lastDragPos = pos;
+        }
+
+        function dragMove(pos) {
+            if (pos) lastDragPos = pos;
+        }
+
+        function endDrag(pos) {
+            if (!pGameActive || !dragStart || ball.isMoving) return;
+            const endP = pos || lastDragPos;
+            if (!endP) return;
+
+            const dx = endP.x - dragStart.x;
+            const dy = endP.y - dragStart.y;
+
+            if (dy < -10) {
+                ball.vx = dx * 0.12;
+                ball.vy = dy * 0.15;
+                ball.isMoving = true;
+            }
+            dragStart = null;
+        }
+
+        function startPenaltyGame() {
+            pScore = 0;
+            pSaves = 0;
+            pTimer = 60;
+            pGameActive = true;
+            resetBall();
+
+            document.getElementById('penalty-score').innerText = pScore;
+            document.getElementById('penalty-saves').innerText = pSaves;
+            document.getElementById('penalty-timer').innerText = pTimer;
+
+            stopPenaltyTimer();
+            pTimerInterval = setInterval(() => {
+                pTimer--;
+                document.getElementById('penalty-timer').innerText = pTimer;
+                if (pTimer <= 0) {
+                    stopPenaltyTimer();
+                    pGameActive = false;
+                    alert(`انتهت الدقيقة! الأهداف: ${pScore} | التصديات: ${pSaves}`);
+                }
+            }, 1000);
+
+            requestAnimationFrame(penaltyGameLoop);
+        }
+
+        function stopPenaltyTimer() {
+            if (pTimerInterval) clearInterval(pTimerInterval);
+        }
+
+        function resetBall() {
+            ball.x = 250;
+            ball.y = 350;
+            ball.vx = 0;
+            ball.vy = 0;
+            ball.isMoving = false;
+        }
+
+        function penaltyGameLoop() {
+            if (!pGameActive) {
+                drawPenaltyScene();
+                return;
+            }
+
+            keeper.x += keeper.speed * keeper.dir;
+            if (keeper.x <= 100 || keeper.x + keeper.width >= 400) {
+                keeper.dir *= -1;
+            }
+
+            if (ball.isMoving) {
+                ball.x += ball.vx;
+                ball.y += ball.vy;
+
+                if (ball.y <= 130) {
+                    if (ball.x >= 100 && ball.x <= 400) {
+                        if (ball.x >= keeper.x && ball.x <= keeper.x + keeper.width) {
+                            pSaves++;
+                            document.getElementById('penalty-saves').innerText = pSaves;
+                        } else {
+                            pScore++;
+                            document.getElementById('penalty-score').innerText = pScore;
+                        }
+                    } else {
+                        pSaves++;
+                        document.getElementById('penalty-saves').innerText = pSaves;
+                    }
+                    resetBall();
+                }
+            }
+
+            drawPenaltyScene();
+            requestAnimationFrame(penaltyGameLoop);
+        }
+
+        function drawPenaltyScene() {
+            pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+
+            pCtx.fillStyle = "#388E3C";
+            pCtx.fillRect(0, 180, 500, 220);
+
+            pCtx.strokeStyle = "#FFFFFF";
+            pCtx.lineWidth = 6;
+            pCtx.strokeRect(100, 60, 300, 120);
+
+            pCtx.strokeStyle = "rgba(255,255,255,0.2)";
+            pCtx.lineWidth = 1;
+            for (let x = 100; x <= 400; x += 15) {
+                pCtx.beginPath(); pCtx.moveTo(x, 60); pCtx.lineTo(x, 180); pCtx.stroke();
+            }
+            for (let y = 60; y <= 180; y += 15) {
+                pCtx.beginPath(); pCtx.moveTo(100, y); pCtx.lineTo(400, y); pCtx.stroke();
+            }
+
+            pCtx.fillStyle = "#E65100";
+            pCtx.fillRect(keeper.x, 110, keeper.width, 70);
+            pCtx.fillStyle = "#FFCC80";
+            pCtx.beginPath();
+            pCtx.arc(keeper.x + keeper.width / 2, 95, 12, 0, Math.PI * 2);
+            pCtx.fill();
+
+            pCtx.fillStyle = "#FFFFFF";
+            pCtx.beginPath();
+            pCtx.arc(250, 350, 4, 0, Math.PI * 2);
+            pCtx.fill();
+
+            pCtx.fillStyle = "#FFFFFF";
+            pCtx.beginPath();
+            pCtx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            pCtx.fill();
+            pCtx.strokeStyle = "#000000";
+            pCtx.lineWidth = 2;
+            pCtx.stroke();
+        }
+
+        /* ----- GAME 2: REACTION TEST ----- */
+        let reactionState = 'idle';
+        let reactionStartTime = 0;
+        let reactionTimeout = null;
+        let bestReaction = localStorage.getItem('bestReaction') || null;
+
+        function resetReactionGame() {
+            reactionState = 'idle';
+            if (reactionTimeout) clearTimeout(reactionTimeout);
+            
+            const box = document.getElementById('reaction-box');
+            box.className = "h-64 rounded-3xl bg-slate-800 text-white flex flex-col items-center justify-center p-6 shadow-2xl cursor-pointer transition-colors select-none border border-slate-700";
+            document.getElementById('reaction-title').innerText = "اضغط هنا للبدء";
+            document.getElementById('reaction-desc').innerText = "انتظر تحوّل المساحة للون الأخضر ثم اضغط فورًا!";
+            document.getElementById('reaction-icon').className = "fa-solid fa-stopwatch text-5xl mb-4 text-orange-400";
+
+            if (bestReaction) {
+                document.getElementById('reaction-best').innerText = bestReaction + ' ms';
+            }
+        }
+
+        function handleReactionClick() {
+            const box = document.getElementById('reaction-box');
+
+            if (reactionState === 'idle') {
+                reactionState = 'waiting';
+                box.className = "h-64 rounded-3xl bg-rose-700 text-white flex flex-col items-center justify-center p-6 shadow-2xl cursor-pointer transition-colors select-none";
+                document.getElementById('reaction-title').innerText = "انتظر اللون الأخضر...";
+                document.getElementById('reaction-desc').innerText = "لا تضغط الآن!";
+                document.getElementById('reaction-icon').className = "fa-solid fa-hourglass-half text-5xl mb-4 text-white animate-spin";
+
+                const randomDelay = Math.floor(Math.random() * 3000) + 2000;
+                reactionTimeout = setTimeout(() => {
+                    reactionState = 'ready';
+                    reactionStartTime = Date.now();
+                    box.className = "h-64 rounded-3xl bg-emerald-600 text-white flex flex-col items-center justify-center p-6 shadow-2xl cursor-pointer transition-colors select-none";
+                    document.getElementById('reaction-title').innerText = "اضغط الآن بسرعة!";
+                    document.getElementById('reaction-desc').innerText = "اضغط!";
+                    document.getElementById('reaction-icon').className = "fa-solid fa-bolt text-5xl mb-4 text-yellow-300 animate-bounce";
+                }, randomDelay);
+
+            } else if (reactionState === 'waiting') {
+                clearTimeout(reactionTimeout);
+                reactionState = 'idle';
+                box.className = "h-64 rounded-3xl bg-amber-600 text-white flex flex-col items-center justify-center p-6 shadow-2xl cursor-pointer transition-colors select-none";
+                document.getElementById('reaction-title').innerText = "ضغطت مبكرًا جدًا!";
+                document.getElementById('reaction-desc').innerText = "انقر لإعادة المحاولة من جديد.";
+                document.getElementById('reaction-icon').className = "fa-solid fa-triangle-exclamation text-5xl mb-4 text-white";
+
+            } else if (reactionState === 'ready') {
+                const reactionTime = Date.now() - reactionStartTime;
+                reactionState = 'idle';
+
+                document.getElementById('reaction-last').innerText = reactionTime + ' ms';
+
+                if (!bestReaction || reactionTime < parseInt(bestReaction)) {
+                    bestReaction = reactionTime;
+                    localStorage.setItem('bestReaction', bestReaction);
+                    document.getElementById('reaction-best').innerText = bestReaction + ' ms';
+                }
+
+                box.className = "h-64 rounded-3xl bg-slate-800 text-white flex flex-col items-center justify-center p-6 shadow-2xl cursor-pointer transition-colors select-none border border-slate-700";
+                document.getElementById('reaction-title').innerText = `${reactionTime} مللي ثانية`;
+                document.getElementById('reaction-desc').innerText = "ممتاز! انقر للاختبار مرة أخرى.";
+                document.getElementById('reaction-icon').className = "fa-solid fa-gauge-high text-5xl mb-4 text-emerald-400";
+            }
+        }
+
+        /* ----- GAME 3: MEMORY MATCH (SPORTS SYMBOLS) ----- */
+        const memorySymbols = [
+            { icon: "fa-solid fa-futbol", label: "كرة القدم" },
+            { icon: "fa-solid fa-basketball", label: "كرة السلة" },
+            { icon: "fa-solid fa-volleyball", label: "كرة الطائرة" },
+            { icon: "fa-solid fa-person-swimming", label: "السباحة" },
+            { icon: "fa-solid fa-table-tennis-paddle-ball", label: "كرة الطاولة" },
+            { icon: "fa-solid fa-trophy", label: "كأس البطولة" },
+            { icon: "fa-solid fa-stopwatch", label: "ساعة التوقيت" },
+            { icon: "fa-solid fa-dumbbell", label: "أثقال وفتنس" }
+        ];
+
+        let flippedCards = [];
+        let memoryMoves = 0;
+        let memoryPairsMatched = 0;
+        let memoryLock = false;
+
+        function startMemoryGame() {
+            memoryMoves = 0;
+            memoryPairsMatched = 0;
+            flippedCards = [];
+            memoryLock = false;
+
+            document.getElementById('memory-moves').innerText = '0';
+            document.getElementById('memory-pairs').innerText = '0 / 8';
+
+            let deck = [...memorySymbols, ...memorySymbols];
+            deck.sort(() => Math.random() - 0.5);
+
+            const grid = document.getElementById('memory-grid');
+            grid.innerHTML = '';
+
+            deck.forEach((item) => {
+                const cardEl = document.createElement('div');
+                cardEl.className = "memory-card h-24 sm:h-28 cursor-pointer";
+                cardEl.innerHTML = `
+                    <div class="memory-card-inner w-full h-full relative rounded-2xl shadow-md border border-slate-200">
+                        <div class="memory-card-front absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl flex items-center justify-center text-orange-400 font-black text-2xl border border-slate-700">
+                            <i class="fa-solid fa-medal"></i>
+                        </div>
+                        <div class="memory-card-back absolute inset-0 bg-gradient-to-br from-orange-500 to-amber-600 text-white rounded-2xl flex flex-col items-center justify-center p-2 font-extrabold text-center shadow-lg">
+                            <i class="${item.icon} text-3xl mb-1"></i>
+                            <span class="text-xs font-bold">${item.label}</span>
+                        </div>
+                    </div>
+                `;
+                cardEl.onclick = () => flipMemoryCard(cardEl, item.label);
+                grid.appendChild(cardEl);
+            });
+        }
+
+        function flipMemoryCard(cardEl, label) {
+            if (memoryLock || cardEl.classList.contains('flipped') || flippedCards.length >= 2) return;
+
+            cardEl.classList.add('flipped');
+            flippedCards.push({ cardEl, label });
+
+            if (flippedCards.length === 2) {
+                memoryMoves++;
+                document.getElementById('memory-moves').innerText = memoryMoves;
+                memoryLock = true;
+
+                if (flippedCards[0].label === flippedCards[1].label) {
+                    memoryPairsMatched++;
+                    document.getElementById('memory-pairs').innerText = `${memoryPairsMatched} / 8`;
+                    flippedCards = [];
+                    memoryLock = false;
+
+                    if (memoryPairsMatched === 8) {
+                        setTimeout(() => alert(`أحسنت! طابقت كافة الرموز الرياضية في ${memoryMoves} محاولة!`), 300);
+                    }
+                } else {
+                    setTimeout(() => {
+                        flippedCards[0].cardEl.classList.remove('flipped');
+                        flippedCards[1].cardEl.classList.remove('flipped');
+                        flippedCards = [];
+                        memoryLock = false;
+                    }, 900);
+                }
+            }
+        }
+
+        /* ----- GAME 4: LESSON STAGES ORDER CHALLENGE ----- */
+        const correctLessonOrder = [
+            "الإحماء",
+            "التمرينات",
+            "النشاط التعليمي",
+            "النشاط التطبيقي",
+            "الألعاب والمسابقات",
+            "الختام"
+        ];
+
+        let currentLessonOrder = [];
+        let orderAttempts = 0;
+        let orderScore = 0;
+        let isOrderSolved = false;
+
+        function resetLessonOrder(reshuffle = true) {
+            if (reshuffle) {
+                do {
+                    currentLessonOrder = [...correctLessonOrder].sort(() => Math.random() - 0.5);
+                } while (isCurrentOrderCorrect());
+            }
+
+            isOrderSolved = false;
+
+            const msgBox = document.getElementById('order-msg-box');
+            msgBox.className = "hidden p-4 rounded-xl font-bold text-sm text-center";
+
+            document.getElementById('order-solution-box').classList.add('hidden');
+            document.getElementById('show-solution-btn').classList.add('hidden');
+
+            renderOrderCards();
+        }
+
+        function isCurrentOrderCorrect() {
+            if (currentLessonOrder.length !== correctLessonOrder.length) return false;
+            for (let i = 0; i < correctLessonOrder.length; i++) {
+                if (currentLessonOrder[i] !== correctLessonOrder[i]) return false;
+            }
+            return true;
+        }
+
+        function renderOrderCards() {
+            const container = document.getElementById('order-cards-list');
+            container.innerHTML = '';
+
+            currentLessonOrder.forEach((stageName, idx) => {
+                const card = document.createElement('div');
+                card.className = "sortable-item bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 flex items-center justify-between shadow-sm hover:border-orange-300 transition-all";
+                
+                card.innerHTML = `
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <span class="w-8 h-8 rounded-xl bg-orange-600 text-white flex items-center justify-center font-black text-sm shadow">
+                            ${idx + 1}
+                        </span>
+                        <span class="font-extrabold text-slate-800 text-base sm:text-lg">${stageName}</span>
+                    </div>
+
+                    <div class="flex items-center space-x-1 space-x-reverse">
+                        <button onclick="moveOrderCard(${idx}, -1)" ${idx === 0 ? 'disabled' : ''} class="w-10 h-10 rounded-xl bg-slate-200 hover:bg-orange-500 hover:text-white disabled:opacity-30 disabled:hover:bg-slate-200 disabled:hover:text-slate-700 text-slate-700 transition-colors flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-arrow-up"></i>
+                        </button>
+                        <button onclick="moveOrderCard(${idx}, 1)" ${idx === currentLessonOrder.length - 1 ? 'disabled' : ''} class="w-10 h-10 rounded-xl bg-slate-200 hover:bg-orange-500 hover:text-white disabled:opacity-30 disabled:hover:bg-slate-200 disabled:hover:text-slate-700 text-slate-700 transition-colors flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-arrow-down"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function moveOrderCard(index, direction) {
+            const targetIndex = index + direction;
+            if (targetIndex < 0 || targetIndex >= currentLessonOrder.length) return;
+
+            const temp = currentLessonOrder[index];
+            currentLessonOrder[index] = currentLessonOrder[targetIndex];
+            currentLessonOrder[targetIndex] = temp;
+
+            renderOrderCards();
+        }
+
+        function checkLessonOrder() {
+            orderAttempts++;
+            document.getElementById('order-attempts').innerText = orderAttempts;
+
+            const msgBox = document.getElementById('order-msg-box');
+
+            if (isCurrentOrderCorrect()) {
+                isOrderSolved = true;
+                orderScore += 10;
+                document.getElementById('order-score').innerText = orderScore;
+
+                msgBox.innerText = "أحسنت! رتّبت مراحل الدرس بشكل صحيح ✓";
+                msgBox.className = "p-4 rounded-xl font-extrabold text-base text-center bg-emerald-100 text-emerald-900 border border-emerald-300 block shadow";
+
+                document.getElementById('show-solution-btn').classList.remove('hidden');
+            } else {
+                msgBox.innerText = "حاول مرة أخرى ✗ (الترتيب الحالي غير صحيح)";
+                msgBox.className = "p-4 rounded-xl font-bold text-sm text-center bg-rose-100 text-rose-900 border border-rose-300 block shadow";
+            }
+        }
+
+        function revealLessonSolution() {
+            if (!isOrderSolved) return;
+            document.getElementById('order-solution-box').classList.remove('hidden');
+        }
+
+        /* ================= INITIALIZATION ================= */
+        window.onload = function() {
+            renderTeachers();
+            const activePage = document.querySelector('.page-section.active');
+            if (activePage) {
+                const pageId = activePage.id.replace('page-', '');
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    const isCurrent = (btn.getAttribute('onclick') || '').includes("'" + pageId + "'");
+                    btn.classList.toggle('is-current', isCurrent);
+                    if (isCurrent) btn.setAttribute('aria-current', 'page');
+                });
+            }
+        };
+
+        // Decorative navigation helpers; they do not change any site content.
+        (function addPagePolish() {
+            const progress = document.getElementById('site-scroll-progress');
+            const topButton = document.createElement('button');
+            topButton.type = 'button';
+            topButton.className = 'back-to-top';
+            topButton.setAttribute('aria-label', 'العودة إلى أعلى الصفحة');
+            topButton.title = 'العودة إلى أعلى الصفحة';
+            topButton.innerHTML = '<i class="fa-solid fa-arrow-up" aria-hidden="true"></i>';
+            topButton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            document.body.appendChild(topButton);
+
+            function updateScrollDecorations() {
+                const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                const ratio = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+                progress.style.width = (ratio * 100) + '%';
+                topButton.classList.toggle('is-visible', window.scrollY > 320);
+            }
+            window.addEventListener('scroll', updateScrollDecorations, { passive: true });
+            window.addEventListener('resize', updateScrollDecorations);
+            updateScrollDecorations();
+        })();
+
+        // User-controlled theme preference; defaults to the original light appearance.
+        function applyTheme(isDark) {
+            document.body.classList.toggle('dark-mode', isDark);
+            const btn = document.getElementById('themeToggle');
+            const icon = document.getElementById('themeToggleIcon');
+            const label = document.getElementById('themeToggleText');
+            if (btn) {
+                btn.setAttribute('aria-pressed', String(isDark));
+                btn.setAttribute('aria-label', isDark ? 'تفعيل الوضع الفاتح' : 'تفعيل الوضع الداكن');
+            }
+            if (icon) icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+            if (label) label.textContent = isDark ? 'الوضع الفاتح' : 'الوضع الداكن';
+        }
+        function toggleTheme() {
+            const isDark = !document.body.classList.contains('dark-mode');
+            applyTheme(isDark);
+            try { localStorage.setItem('institute-theme', isDark ? 'dark' : 'light'); } catch (e) {}
+        }
+        (function initTheme() {
+            let savedTheme = 'light';
+            try { savedTheme = localStorage.getItem('institute-theme') || 'light'; } catch (e) {}
+            applyTheme(savedTheme === 'dark');
+        })();
+
+    </script>
+</body>
+</html>
